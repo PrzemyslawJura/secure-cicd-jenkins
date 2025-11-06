@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        shell('/bin/bash')
+    }
+
     environment {
         VENV_PATH = '/opt/jenkins-tools/venv'
         IMAGE_NAME = "secure-cicd-demo"
