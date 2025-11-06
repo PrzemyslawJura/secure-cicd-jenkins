@@ -16,6 +16,7 @@ pipeline {
         stage('Prepare Python Environment') {
             steps {
                 sh '''
+                    #!/bin/bash
                     set -e
 
                     echo "=== Checking Python3 installation ==="
@@ -47,6 +48,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
+                    #!/bin/bash
+                    set -e
                     source $VENV_PATH/bin/activate
                     pytest app/
                     deactivate
@@ -57,6 +60,8 @@ pipeline {
         stage('Security Scan') {
             steps {
                 sh '''
+                    #!/bin/bash
+                    set -e
                     source $VENV_PATH/bin/activate
                     bandit -r app/
                     deactivate
