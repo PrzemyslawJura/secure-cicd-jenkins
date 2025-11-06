@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    options {
-        shell('/bin/bash')
-    }
-
     environment {
         VENV_PATH = '/opt/jenkins-tools/venv'
         IMAGE_NAME = "secure-cicd-demo"
@@ -17,59 +13,56 @@ pipeline {
             }
         }
 
-        stage('Prepare Python Environment') {
+        stage('Setup Python Environment') {
             steps {
-                sh '''
-                    #!/bin/bash
+                sh '''bash -c "
                     set -e
 
-                    echo "=== Checking Python3 installation ==="
+                    echo '=== Checking Python3 installation ==='
                     if ! command -v python3 >/dev/null 2>&1; then
-                        echo "Installing Python3..."
+                        echo 'Installing Python3...'
                         sudo apt-get update -y
                         sudo apt-get install -y python3 python3-venv python3-pip
                     fi
 
-                    echo "=== Checking virtual environment ==="
-                    if [ ! -d "$VENV_PATH" ]; then
-                        echo "Creating venv at $VENV_PATH"
+                    echo '=== Checking virtual environment ==='
+                    if [ ! -d '$VENV_PATH' ]; then
+                        echo 'Creating venv at $VENV_PATH'
                         sudo mkdir -p $(dirname $VENV_PATH)
                         sudo chown -R jenkins:jenkins $(dirname $VENV_PATH)
                         python3 -m venv $VENV_PATH
                     else
-                        echo "Using existing venv"
+                        echo 'Using existing venv'
                     fi
 
-                    echo "=== Activating venv and installing dependencies ==="
+                    echo '=== Activating venv and installing dependencies ==='
                     source $VENV_PATH/bin/activate
                     pip install --upgrade pip
                     pip install --no-cache-dir -r app/requirements.txt
                     deactivate
-                '''
+                "'''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh '''
-                    #!/bin/bash
+                sh '''bash -c "
                     set -e
                     source $VENV_PATH/bin/activate
                     pytest app/
                     deactivate
-                '''
+                "'''
             }
         }
 
         stage('Security Scan') {
             steps {
-                sh '''
-                    #!/bin/bash
+                sh '''bash -c "
                     set -e
                     source $VENV_PATH/bin/activate
                     bandit -r app/
                     deactivate
-                '''
+                "'''
             }
         }
 
