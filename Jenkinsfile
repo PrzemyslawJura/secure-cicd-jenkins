@@ -13,26 +13,30 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+    stages {
+        stage('Prepare Python Environment') {
             steps {
                 sh '''
                     set -e
 
-                    # Ensure venv module is installed
-                    if ! python3 -m venv --help >/dev/null 2>&1; then
-                        echo "Installing python3-venv..."
+                    echo "=== Checking Python3 installation ==="
+                    if ! command -v python3 >/dev/null 2>&1; then
+                        echo "Installing Python3..."
                         sudo apt-get update -y
-                        sudo apt-get install -y python3-venv
+                        sudo apt-get install -y python3 python3-venv python3-pip
                     fi
 
-                    # Create venv if missing
+                    echo "=== Checking virtual environment ==="
                     if [ ! -d "$VENV_PATH" ]; then
-                        echo "Creating Python virtual environment..."
+                        echo "Creating venv at $VENV_PATH"
+                        sudo mkdir -p $(dirname $VENV_PATH)
+                        sudo chown -R jenkins:jenkins $(dirname $VENV_PATH)
                         python3 -m venv $VENV_PATH
+                    else
+                        echo "Using existing venv"
                     fi
 
-                    # Activate and install dependencies
-                    echo "Activating virtual environment and installing dependencies..."
+                    echo "=== Activating venv and installing dependencies ==="
                     source $VENV_PATH/bin/activate
                     pip install --upgrade pip
                     pip install --no-cache-dir -r app/requirements.txt
@@ -41,20 +45,23 @@ pipeline {
             }
         }
 
-        stage('Unit Tests') {
+        stage('Run Tests') {
             steps {
                 sh '''
-                source $VENV_PATH/bin/activate
-                pytest app/ --maxfail=1 --disable-warnings -q
-                deactivate
+                    source $VENV_PATH/bin/activate
+                    pytest app/
+                    deactivate
                 '''
             }
         }
 
-        stage('Static Code Analysis - Bandit') {
+        stage('Security Scan') {
             steps {
-                
-                sh './scripts/run_bandit.sh'
+                sh '''
+                    source $VENV_PATH/bin/activate
+                    bandit -r app/
+                    deactivate
+                '''
             }
         }
 
