@@ -13,7 +13,6 @@ pipeline {
             }
         }
 
-    stages {
         stage('Prepare Python Environment') {
             steps {
                 sh '''
