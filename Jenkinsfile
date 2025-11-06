@@ -14,7 +14,29 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install --no-cache-dir -r app/requirements.txt'
+                sh '''
+                    set -e
+
+                    # Ensure venv module is installed
+                    if ! python3 -m venv --help >/dev/null 2>&1; then
+                        echo "Installing python3-venv..."
+                        sudo apt-get update -y
+                        sudo apt-get install -y python3-venv
+                    fi
+
+                    # Create venv if missing
+                    if [ ! -d "$VENV_PATH" ]; then
+                        echo "Creating Python virtual environment..."
+                        python3 -m venv $VENV_PATH
+                    fi
+
+                    # Activate and install dependencies
+                    echo "Activating virtual environment and installing dependencies..."
+                    source $VENV_PATH/bin/activate
+                    pip install --upgrade pip
+                    pip install --no-cache-dir -r app/requirements.txt
+                    deactivate
+                '''
             }
         }
 
