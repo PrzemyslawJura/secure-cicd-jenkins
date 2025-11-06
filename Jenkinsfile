@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        VENV_PATH = '/opt/jenkins-tools/venv'
         IMAGE_NAME = "secure-cicd-demo"
     }
 
@@ -42,12 +43,17 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh 'pytest app/ --maxfail=1 --disable-warnings -q'
+                sh '''
+                source $VENV_PATH/bin/activate
+                pytest app/ --maxfail=1 --disable-warnings -q
+                deactivate
+                '''
             }
         }
 
         stage('Static Code Analysis - Bandit') {
             steps {
+                
                 sh './scripts/run_bandit.sh'
             }
         }
