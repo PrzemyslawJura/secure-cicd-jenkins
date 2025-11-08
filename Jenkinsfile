@@ -59,9 +59,8 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    chmod u+x run_bandit.sh
-                    ./scripts/run_bandit.sh
-                    deactivate
+                    #chmod u+x run_bandit.sh
+                    scripts/run_bandit.sh
                 "'''
             }
         }
