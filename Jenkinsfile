@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        VENV_PATH = '/opt/jenkins-tools/venv'
+        VENV_PATH = "${env.WORKSPACE}/.venv"
         IMAGE_NAME = "secure-cicd-demo"
     }
 
