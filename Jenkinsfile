@@ -37,7 +37,6 @@ pipeline {
                         echo 'Creating venv at ${VENV_PATH}'
                         mkdir -p $(dirname ${VENV_PATH})
                         chown -R jenkins:jenkins $(dirname ${VENV_PATH})
-                        chown -R jenkins:jenkins $(dirname ${VENV_ACTIVATE_PATH})
                         python3 -m venv ${VENV_PATH}
                     else
                         echo 'Using existing venv'
@@ -46,6 +45,7 @@ pipeline {
                     echo '=== Activating venv and installing dependencies ==='
                     ${VENV_ACTIVATE_PATH} pip install --upgrade pip
                     ${VENV_ACTIVATE_PATH} pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
+                    chown -R jenkins:jenkins $(dirname ${VENV_ACTIVATE_PATH})
                 "'''
             }
         }
