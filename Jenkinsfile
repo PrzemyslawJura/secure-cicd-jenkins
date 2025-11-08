@@ -59,8 +59,10 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
+                    source $VENV_PATH/bin/activate
                     chmod u+x scripts/run_bandit.sh
                     scripts/run_bandit.sh
+                    deactivate
                 "'''
             }
         }
