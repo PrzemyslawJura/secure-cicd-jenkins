@@ -60,7 +60,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     source $VENV_PATH/bin/activate
-                    ${VENV_PATH}/bin/bandit -r app/
+                    ./scripts/run_bandit.sh
                     deactivate
                 "'''
             }
