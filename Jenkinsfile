@@ -37,6 +37,7 @@ pipeline {
                         echo 'Creating venv at ${VENV_PATH}'
                         mkdir -p $(dirname ${VENV_PATH})
                         chown -R jenkins:jenkins $(dirname ${VENV_PATH})
+                        chown -R jenkins:jenkins $(dirname ${VENV_ACTIVATE_PATH})
                         python3 -m venv ${VENV_PATH}
                     else
                         echo 'Using existing venv'
