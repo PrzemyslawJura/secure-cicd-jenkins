@@ -43,8 +43,8 @@ pipeline {
                     fi
 
                     echo '=== Activating venv and installing dependencies ==='
-                    ${VENV_PATH}/bin/pip pip install --upgrade pip
-                    ${VENV_PATH}/bin/pip pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
+                    ${VENV_PATH}/bin/pip install --upgrade pip
+                    ${VENV_PATH}/bin/pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
                 "'''
             }
         }
@@ -53,7 +53,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    ${VENV_PATH}/bin/pytest pytest ${TEST_PATH}
+                    ${VENV_PATH}/bin/pytest ${TEST_PATH}
                 "'''
             }
         }
