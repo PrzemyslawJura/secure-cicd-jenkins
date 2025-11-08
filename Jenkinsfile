@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'python-docker'
+    }
 
     environment {
         VENV_PATH = "${env.WORKSPACE}/.venv"
@@ -7,8 +9,8 @@ pipeline {
         REQUIREMENTS_PATH = "app/requirements.txt"
         IMAGE_NAME = "secure-cicd-demo"
         TEST_PATH = "app/"
-        TRIVY_PATH = "scripts//run_trivy.sh"
-        BANDIT_PATH = "scripts//run_bandit.sh"
+        TRIVY_PATH = "scripts/run_trivy.sh"
+        BANDIT_PATH = "scripts/run_bandit.sh"
 
         NULL_DEVICE = "/dev/null"
     }
@@ -106,7 +108,7 @@ pipeline {
             echo 'Cleaning up...'
             sh '''bash -c "
                 set -e
-                docker rm -f secure-demo || true
+                docker system prune -f || true
                 "'''
         }
         success {
