@@ -108,6 +108,7 @@ pipeline {
             echo 'Cleaning up...'
             sh '''bash -c "
                 set -e
+                docker rm -f secure-demo || true
                 docker system prune -f || true
                 "'''
         }
