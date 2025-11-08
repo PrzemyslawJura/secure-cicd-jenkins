@@ -60,7 +60,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     source $VENV_PATH/bin/activate
-                    chown -X jenkins:jenkins scripts/run_bandit.sh
+                    chmod u+x scripts/run_bandit.sh
                     scripts/run_bandit.sh
                     deactivate
                 "'''
@@ -80,7 +80,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    chown -X jenkins:jenkins scripts/run_trivy.sh
+                    chmod u+x scripts/run_trivy.sh
                     scripts/run_trivy.sh
                     "'''
             }
