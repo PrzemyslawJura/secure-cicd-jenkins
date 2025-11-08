@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'python-docker'
-    }
+    agent any
 
     environment {
         VENV_PATH = "${env.WORKSPACE}/.venv"
@@ -109,6 +107,7 @@ pipeline {
             sh '''bash -c "
                 set -e
                 docker rm -f secure-demo || true
+                docker system prune -f || true
                 "'''
         }
         success {
