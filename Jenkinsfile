@@ -68,13 +68,19 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh '''bash -c "
+                    set -e
+                    docker build -t $IMAGE_NAME .
+                    "'''
             }
         }
 
         stage('Container Scan - Trivy') {
             steps {
-                sh './scripts/run_trivy.sh'
+                sh '''bash -c "
+                    set -e
+                    ./scripts/run_trivy.sh
+                    "'''
             }
         }
 
@@ -82,15 +88,21 @@ pipeline {
             steps {
                 echo 'Deploying container locally (optional step)...'
                 // Example: run locally for demo
-                sh 'docker run -d -p 5000:5000 --name secure-demo $IMAGE_NAME || true'
+                sh '''bash -c "
+                    set -e
+                    docker run -d -p 5000:5000 --name secure-demo $IMAGE_NAME || true
+                    "'''
             }
         }
     }
 
     post {
         always {
-            echo '🧹 Cleaning up...'
-            sh 'docker rm -f secure-demo || true'
+            echo 'Cleaning up...'
+            sh '''bash -c "
+                set -e
+                docker rm -f secure-demo || true
+                "'''
         }
         success {
             echo '✅ Pipeline completed successfully!'
