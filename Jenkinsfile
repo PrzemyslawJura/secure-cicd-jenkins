@@ -80,7 +80,8 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    ./scripts/run_trivy.sh
+                    chmod u+x scripts/run_trivy.sh
+                    scripts/run_trivy.sh
                     "'''
             }
         }
