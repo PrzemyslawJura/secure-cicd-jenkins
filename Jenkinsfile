@@ -43,10 +43,8 @@ pipeline {
                     fi
 
                     echo '=== Activating venv and installing dependencies ==='
-                    source ${VENV_ACTIVATE_PATH}
-                    pip install --upgrade pip
-                    pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
-                    deactivate
+                    ${VENV_ACTIVATE_PATH} pip install --upgrade pip
+                    ${VENV_ACTIVATE_PATH} pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
                 "'''
             }
         }
@@ -55,9 +53,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    source ${VENV_ACTIVATE_PATH}
-                    pytest ${TEST_PATH}
-                    deactivate
+                    ${VENV_ACTIVATE_PATH} pytest ${TEST_PATH}
                 "'''
             }
         }
@@ -66,10 +62,8 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    source ${VENV_ACTIVATE_PATH}
-                    chmod u+x ${BANDIT_PATH}
-                    ${BANDIT_PATH}
-                    deactivate
+                    ${VENV_ACTIVATE_PATH} chmod u+x ${BANDIT_PATH}
+                    ${VENV_ACTIVATE_PATH} ${BANDIT_PATH}
                 "'''
             }
         }
