@@ -45,7 +45,7 @@ pipeline {
                     echo '=== Activating venv and installing dependencies ==='
                     ${VENV_ACTIVATE_PATH} pip install --upgrade pip
                     ${VENV_ACTIVATE_PATH} pip install --no-cache-dir -r ${REQUIREMENTS_PATH}
-                    chown -R jenkins:jenkins $(dirname ${VENV_ACTIVATE_PATH})
+                    chmod u+x ${VENV_ACTIVATE_PATH}
                 "'''
             }
         }
