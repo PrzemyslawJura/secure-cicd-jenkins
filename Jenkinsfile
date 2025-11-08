@@ -21,15 +21,15 @@ pipeline {
                     echo '=== Checking Python3 installation ==='
                     if ! command -v python3 >/dev/null 2>&1; then
                         echo 'Installing Python3...'
-                        sudo apt-get update -y
-                        sudo apt-get install -y python3 python3-venv python3-pip
+                        apt-get update -y
+                        apt-get install -y python3 python3-venv python3-pip
                     fi
 
                     echo '=== Checking virtual environment ==='
                     if [ ! -d '$VENV_PATH' ]; then
                         echo 'Creating venv at $VENV_PATH'
-                        sudo mkdir -p $(dirname $VENV_PATH)
-                        sudo chown -R jenkins:jenkins $(dirname $VENV_PATH)
+                        mkdir -p $(dirname $VENV_PATH)
+                        chown -R jenkins:jenkins $(dirname $VENV_PATH)
                         python3 -m venv $VENV_PATH
                     else
                         echo 'Using existing venv'
@@ -60,7 +60,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     source $VENV_PATH/bin/activate
-                    chmod u+x scripts/run_bandit.sh
+                    chown -X jenkins:jenkins scripts/run_bandit.sh
                     scripts/run_bandit.sh
                     deactivate
                 "'''
@@ -80,7 +80,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    chmod u+x scripts/run_trivy.sh
+                    chown -X jenkins:jenkins scripts/run_trivy.sh
                     scripts/run_trivy.sh
                     "'''
             }
