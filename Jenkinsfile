@@ -63,8 +63,9 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     chmod u+x ${BANDIT_PATH}
-                    ${VENV_PATH}/bin/bandit ${BANDIT_PATH}
+                    ${VENV_PATH}/bin/bandit -r ${BANDIT_PATH}
                 "'''
+                archiveArtifacts artifacts: 'bandit-report.html', fingerprint: true
             }
         }
 
@@ -72,7 +73,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    docker build -t ${IMAGE_NAME} .
+                    docker build -t $IMAGE_NAME --cache-from=${IMAGE_NAME} .
                     "'''
             }
         }
@@ -84,6 +85,7 @@ pipeline {
                     chmod u+x ${TRIVY_PATH}
                     ${TRIVY_PATH}
                     "'''
+                    archiveArtifacts artifacts: 'trivy-report.txt', fingerprint: true
             }
         }
 
