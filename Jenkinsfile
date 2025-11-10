@@ -62,7 +62,7 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    sourcee ${VENV_ACTIVATE_PATH}
+                    source ${VENV_ACTIVATE_PATH}
                     ${BANDIT_PATH}
                     deactivate
                 "'''
