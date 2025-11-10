@@ -87,7 +87,7 @@ pipeline {
                     chmod u+x "${TRIVY_PATH}"
                     "${TRIVY_PATH}"
                     "'''
-                archiveArtifacts artifacts: "trivy-report.txt", fingerprint: true
+                archiveArtifacts artifacts: "trivy-report.json", fingerprint: true
             }
         }
 
