@@ -85,7 +85,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     chmod u+x "${TRIVY_PATH}"
-                    "${TRIVY_PATH}" --severity HIGH,CRITICAL --exit-code 0 --no-progress "$IMAGE_NAME" > "trivy-report.txt"
+                    "${TRIVY_PATH}"
                     "'''
                 archiveArtifacts artifacts: "trivy-report.txt", fingerprint: true
             }
