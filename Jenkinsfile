@@ -63,6 +63,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     source ${VENV_ACTIVATE_PATH}
+                    chmod u+x ${BANDIT_PATH}
                     ${BANDIT_PATH}
                     deactivate
                 "'''
