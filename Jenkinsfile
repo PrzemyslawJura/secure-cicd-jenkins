@@ -60,13 +60,13 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                sh '''bash -c "
+                sh '''
                     set -e
                     source ${VENV_ACTIVATE_PATH}
                     chmod u+x ${BANDIT_PATH}
                     ${BANDIT_PATH}
                     deactivate
-                "'''
+                '''
                 archiveArtifacts artifacts: 'bandit-report.html', fingerprint: true
             }
         }
