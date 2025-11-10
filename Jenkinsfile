@@ -62,8 +62,9 @@ pipeline {
             steps {
                 sh '''bash -c "
                     set -e
-                    chmod u+x ${BANDIT_PATH}
-                    ${VENV_PATH}/bin/bandit -r app/ -f html -o bandit-report.html || true
+                    sourcee ${VENV_ACTIVATE_PATH}
+                    ${BANDIT_PATH}
+                    deactivate
                 "'''
                 archiveArtifacts artifacts: 'bandit-report.html', fingerprint: true
             }
