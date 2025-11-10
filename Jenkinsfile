@@ -63,7 +63,7 @@ pipeline {
                 sh '''bash -c "
                     set -e
                     chmod u+x ${BANDIT_PATH}
-                    ${BANDIT_PATH}
+                    ${VENV_PATH}/bin/bandit ${BANDIT_PATH}
                 "'''
                 archiveArtifacts artifacts: 'bandit-report.html', fingerprint: true
             }
